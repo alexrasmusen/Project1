@@ -96,15 +96,23 @@ public class ImageController {
     }
 
     private BufferedImage changeUpsideDown(BufferedImage img) {
+            for (int x = 0; x < img.getWidth(); x++) {
+                int yEnd = img.getHeight()-1;
+                int yStart = 0;
+                while (yStart<=yEnd) {
+                    yEnd--;
+                    yStart++;
+                    int pixel = img.getRGB(x, yStart);
+                    int endPixel = img.getRGB(x, yEnd);
+                    Color color = new Color(pixel);
+                    Color color2 = new Color(endPixel);
+                    img.setRGB(x, yEnd, color.getRGB());
+                    img.setRGB(x, yStart, color2.getRGB());
+                }
+            }
+            return img;
+        }
 
-
-
-
-
-
-
-        return img;
-    }
 
     private BufferedImage changeMirror(BufferedImage img) {
             for (int y = 0; y < img.getHeight(); y++) {
