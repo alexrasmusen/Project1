@@ -113,15 +113,27 @@ public class ImageController {
     }
 
     private BufferedImage changeReflect(BufferedImage img) {
-        for (int y = 0; y < img.getHeight(); y++) {
-            for (int x = 0; x < img.getWidth(); x++) {
-            //todo: fill in this to do what is intended
 
-            }
+        for (int y = 0; y < img.getHeight(); y++) {
+            int xEnd = img.getWidth()-1;
+            int xStart = 0;
+            while (xStart<=xEnd) {
+                xEnd--;
+                xStart++;
+                int pixel = img.getRGB(xStart, y);
+                Color color = new Color(pixel);
+                img.setRGB(xEnd, y, color.getRGB());
+                img.setRGB(xStart, y, color.getRGB());
         }
 
-        return img;
-    }
+            //todo: fill in this to do what is intended
+
+
+
+
+            }
+            return img;
+        }
 
     private BufferedImage changeSepia(BufferedImage img) {
         for (int y = 0; y < img.getHeight(); y++) {
