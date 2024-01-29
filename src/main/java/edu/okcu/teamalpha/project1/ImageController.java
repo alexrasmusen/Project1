@@ -49,7 +49,7 @@ public class ImageController {
             FileChooser fileChooser = new FileChooser();
             selectedFile = fileChooser.showOpenDialog(null);
 
-            Image image = new Image(selectedFile.getPath());
+            Image image = new Image(selectedFile.toURI().toString());
 
             imgPicture.setImage(image);
             imgPicture.setFitHeight(400);
