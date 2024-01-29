@@ -168,10 +168,24 @@ public class ImageController {
         for (int y = 0; y < img.getHeight(); y++) {
             for (int x = 0; x < img.getWidth(); x++) {
                 //todo: fill in this to do what is intended
+                int pixel = img.getRGB(x, y);
+                Color color = new Color(pixel);
 
+                int alpha = color.getAlpha();
+                int red = color.getRed();
+                int green = color.getGreen();
+                int blue = color.getBlue();
+
+
+                red = (int) (0.393*red + 0.769*green + 0.189*blue);
+                blue = (int) (0.349*red + 0.686*green + 0.168*blue);
+                green = (int) (0.272*red + 0.534*green + 0.131*blue);
+
+
+                Color newPixel = new Color(alpha, red, green, blue);
+                img.setRGB(x, y, newPixel.getRGB());
             }
         }
-
         return img;
     }
 
