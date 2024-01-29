@@ -22,6 +22,7 @@ public class ImageController {
     public Label lblWelcomeText;
     public ChoiceBox choiceTransformation;
     public VBox vboxBackground;
+    public ImageView imgNewPicture;
 
     @FXML
 
@@ -35,7 +36,7 @@ public class ImageController {
         vboxBackground.setStyle("-fx-background-color: #E1E1E1");
 
         //adds choice options to choiceBox
-        choiceTransformation.getItems().addAll("Grayscale", "Sepia", "Reflect");
+        choiceTransformation.getItems().addAll("Grayscale", "Sepia", "Reflect", "Mirror", "Upside Down");
     }
 
     /**
@@ -52,8 +53,8 @@ public class ImageController {
             Image image = new Image(selectedFile.toURI().toString());
 
             imgPicture.setImage(image);
-            imgPicture.setFitHeight(400);
-            imgPicture.setFitWidth(400);
+            imgPicture.setFitHeight(300);
+            imgPicture.setFitWidth(300);
 
             lblWelcomeText.setText("Now select a transformation!");
         } catch (NullPointerException exception) {
@@ -80,6 +81,11 @@ public class ImageController {
                 case "Reflect":
                     changeReflect(img);
                     break;
+                case "Mirror":
+                    changeMirror(img);
+                    break;
+                case "Upside Down":
+                    changeUpsideDown(img);
             }
             displayImage(convertToFxImage(img));  //Converts BufferedImage to Image using stolen method.
         } catch (IllegalArgumentException exception) {
@@ -87,6 +93,14 @@ public class ImageController {
             lblWelcomeText.setText("Please load an image first!");
         }
 
+    }
+
+    private BufferedImage changeUpsideDown(BufferedImage img) {
+        return img;
+    }
+
+    private BufferedImage changeMirror(BufferedImage img) {
+        return img;
     }
 
     private BufferedImage changeGrayScale(BufferedImage img) {
@@ -143,7 +157,9 @@ public class ImageController {
     }
 
     public void displayImage(Image image) {
-        imgPicture.setImage(image);
+        imgNewPicture.setImage(image);
+        imgNewPicture.setFitHeight(300);
+        imgNewPicture.setFitWidth(300);
     }
 
     /**
