@@ -112,8 +112,8 @@ public class ImageController {
         return img;
     }
 
+    //This method reflects an image but only once
     private BufferedImage changeReflect(BufferedImage img) {
-
         for (int y = 0; y < img.getHeight(); y++) {
             int xEnd = img.getWidth()-1;
             int xStart = 0;
@@ -121,16 +121,12 @@ public class ImageController {
                 xEnd--;
                 xStart++;
                 int pixel = img.getRGB(xStart, y);
+                int endPixel = img.getRGB(xEnd, y);
                 Color color = new Color(pixel);
+                Color color2 = new Color(endPixel);
                 img.setRGB(xEnd, y, color.getRGB());
-                img.setRGB(xStart, y, color.getRGB());
-        }
-
-            //todo: fill in this to do what is intended
-
-
-
-
+                img.setRGB(xStart, y, color2.getRGB());
+                }
             }
             return img;
         }
