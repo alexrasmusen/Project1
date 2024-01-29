@@ -110,16 +110,17 @@ public class ImageController {
                 int pixel = img.getRGB(x, y);
                 Color color = new Color(pixel);
 
-                int alpha = color.getAlpha();
+                //int alpha = color.getAlpha(); //alpha is useless currently for grayscale
                 int red = color.getRed();
                 int green = color.getGreen();
                 int blue = color.getBlue();
 
-                red = red / 3;
-                blue = blue /3;
-                green = green/3;
+                int grayScale = (red + blue + green)/3;
+                red = grayScale;
+                green = grayScale;
+                blue = grayScale;
 
-                Color newPixel = new Color(alpha, red, green, blue);
+                Color newPixel = new Color(red, green, blue);
                 img.setRGB(x, y, newPixel.getRGB());
             }
         }
