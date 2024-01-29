@@ -100,8 +100,19 @@ public class ImageController {
     }
 
     private BufferedImage changeMirror(BufferedImage img) {
-        return img;
-    }
+            for (int y = 0; y < img.getHeight(); y++) {
+                int xEnd = img.getWidth()-1;
+                int xStart = 0;
+                while (xStart<=xEnd) {
+                    xEnd--;
+                    xStart++;
+                    int pixel = img.getRGB(xStart, y);
+                    Color color = new Color(pixel);
+                    img.setRGB(xEnd, y, color.getRGB());
+                }
+            }
+            return img;
+        }
 
     private BufferedImage changeGrayScale(BufferedImage img) {
         for (int y = 0; y < img.getHeight(); y++) {
