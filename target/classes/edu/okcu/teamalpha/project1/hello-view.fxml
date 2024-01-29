@@ -16,7 +16,12 @@
       </font>
    </Label>
    <Button fx:id="bttnLoadImage" mnemonicParsing="false" onAction="#onLoadImageClick" prefHeight="26.0" prefWidth="207.0" text="Load Image" />
-   <ImageView fx:id="imgPicture" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" style="-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 20, 0, 0, 0)"/>
+   <HBox alignment="TOP_CENTER" prefHeight="100.0" prefWidth="200.0" style="-fx-spacing: 50; -fx-padding: -10">
+      <children>
+         <ImageView fx:id="imgPicture" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" style="-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 20, 0, 0, 0)" />
+         <ImageView fx:id="imgNewPicture" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" style="-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 20, 0, 0, 0)"/>
+      </children>
+   </HBox>
    <Label text="Transformation">
       <font>
          <Font name="Century Gothic" size="14.0" />

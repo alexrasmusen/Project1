@@ -22,6 +22,7 @@ public class ImageController {
     public Label lblWelcomeText;
     public ChoiceBox choiceTransformation;
     public VBox vboxBackground;
+    public ImageView imgNewPicture;
 
     @FXML
 
@@ -35,7 +36,7 @@ public class ImageController {
         vboxBackground.setStyle("-fx-background-color: #E1E1E1");
 
         //adds choice options to choiceBox
-        choiceTransformation.getItems().addAll("Grayscale", "Sepia", "Reflect");
+        choiceTransformation.getItems().addAll("Grayscale", "Sepia", "Reflect", "Mirror", "Upside Down");
     }
 
     /**
@@ -52,8 +53,8 @@ public class ImageController {
             Image image = new Image(selectedFile.toURI().toString());
 
             imgPicture.setImage(image);
-            imgPicture.setFitHeight(400);
-            imgPicture.setFitWidth(400);
+            imgPicture.setFitHeight(300);
+            imgPicture.setFitWidth(300);
 
             lblWelcomeText.setText("Now select a transformation!");
         } catch (NullPointerException exception) {
@@ -80,6 +81,11 @@ public class ImageController {
                 case "Reflect":
                     changeReflect(img);
                     break;
+                case "Mirror":
+                    changeMirror(img);
+                    break;
+                case "Upside Down":
+                    changeUpsideDown(img);
             }
             displayImage(convertToFxImage(img));  //Converts BufferedImage to Image using stolen method.
         } catch (IllegalArgumentException exception) {
@@ -89,6 +95,25 @@ public class ImageController {
 
     }
 
+    private BufferedImage changeUpsideDown(BufferedImage img) {
+        return img;
+    }
+
+    private BufferedImage changeMirror(BufferedImage img) {
+            for (int y = 0; y < img.getHeight(); y++) {
+                int xEnd = img.getWidth()-1;
+                int xStart = 0;
+                while (xStart<=xEnd) {
+                    xEnd--;
+                    xStart++;
+                    int pixel = img.getRGB(xStart, y);
+                    Color color = new Color(pixel);
+                    img.setRGB(xEnd, y, color.getRGB());
+                }
+            }
+            return img;
+        }
+
     private BufferedImage changeGrayScale(BufferedImage img) {
         for (int y = 0; y < img.getHeight(); y++) {
             for (int x = 0; x < img.getWidth(); x++) {
@@ -96,32 +121,41 @@ public class ImageController {
                 int pixel = img.getRGB(x, y);
                 Color color = new Color(pixel);
 
-                int alpha = color.getAlpha();
+                //int alpha = color.getAlpha(); //alpha is useless currently for grayscale
                 int red = color.getRed();
                 int green = color.getGreen();
                 int blue = color.getBlue();
 
-                red = red / 3;
-                blue = blue /3;
-                green = green/3;
+                int grayScale = (red + blue + green)/3;
+                red = grayScale;
+                green = grayScale;
+                blue = grayScale;
 
-                Color newPixel = new Color(alpha, red, green, blue);
+                Color newPixel = new Color(red, green, blue);
                 img.setRGB(x, y, newPixel.getRGB());
             }
         }
         return img;
     }
 
+    //This method reflects an image but only once
     private BufferedImage changeReflect(BufferedImage img) {
         for (int y = 0; y < img.getHeight(); y++) {
-            for (int x = 0; x < img.getWidth(); x++) {
-            //todo: fill in this to do what is intended
-
+            int xEnd = img.getWidth()-1;
+            int xStart = 0;
+            while (xStart<=xEnd) {
+                xEnd--;
+                xStart++;
+                int pixel = img.getRGB(xStart, y);
+                int endPixel = img.getRGB(xEnd, y);
+                Color color = new Color(pixel);
+                Color color2 = new Color(endPixel);
+                img.setRGB(xEnd, y, color.getRGB());
+                img.setRGB(xStart, y, color2.getRGB());
+                }
             }
+            return img;
         }
-
-        return img;
-    }
 
     private BufferedImage changeSepia(BufferedImage img) {
         for (int y = 0; y < img.getHeight(); y++) {
@@ -149,7 +183,9 @@ public class ImageController {
     }
 
     public void displayImage(Image image) {
-        imgPicture.setImage(image);
+        imgNewPicture.setImage(image);
+        imgNewPicture.setFitHeight(300);
+        imgNewPicture.setFitWidth(300);
     }
 
     /**
