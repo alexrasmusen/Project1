@@ -131,6 +131,7 @@ public class ImageController {
             return img;
         }
 
+        //This method mirrors an image
     private BufferedImage changeMirror(BufferedImage img) {
         for (int y = 0; y < img.getHeight(); y++) {
             int xEnd = img.getWidth()-1;
