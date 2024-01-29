@@ -179,18 +179,28 @@ public class ImageController {
                 int pixel = img.getRGB(x, y);
                 Color color = new Color(pixel);
 
-                int alpha = color.getAlpha();
                 int red = color.getRed();
                 int green = color.getGreen();
                 int blue = color.getBlue();
 
+                double testRed = (red * 0.393) +(green * 0.769) + (blue * 0.189);
+                double testGreen = (red * 0.349) +(green * 0.686) + (blue * 0.168);
+                double testBlue =(red * 0.272) +(green * 0.534) + (blue * 0.131);
 
-                red = (int) (0.393*red + 0.769*green + 0.189*blue);
-                blue = (int) (0.349*red + 0.686*green + 0.168*blue);
-                green = (int) (0.272*red + 0.534*green + 0.131*blue);
+                int sepiaRed = (int)Math.round(testRed);
+                int sepiaBlue = (int)Math.round(testBlue);
+                int sepiaGreen = (int)Math.round(testGreen);
+                if(sepiaRed >= 250){
+                    sepiaRed = 250;
+                }
+                if(sepiaGreen >= 250){
+                    sepiaGreen = 250;
+                }
+                red = sepiaRed;
+                green = sepiaGreen;
+                blue = sepiaBlue;
 
-
-                Color newPixel = new Color(alpha, red, green, blue);
+                Color newPixel = new Color(red, green, blue);
                 img.setRGB(x, y, newPixel.getRGB());
             }
         }
