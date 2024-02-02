@@ -16,6 +16,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
+
 public class ImageController {
 
     public Label lblWelcomeText;
@@ -117,7 +118,7 @@ public class ImageController {
         }
 
     /**
-     *  Method for mirroring the right side of the image to the left. It creates a funny effect when using pictures of faces.
+     *  Method for taking the left side of the image and mirroring it over the right. It creates a funny effect when using pictures of faces.
      * @param img - the image to be mirrored
      */
     private void changeMirror(BufferedImage img) {
@@ -185,10 +186,13 @@ public class ImageController {
             }
         }
 
+    /**
+     * Method that turns an image into sepia. Does this by getting the color values for each pixel then doing some calculations.
+     * @param img - Image to be turned sepia.
+     */
     private void changeSepia(BufferedImage img) {
         for (int y = 0; y < img.getHeight(); y++) {
             for (int x = 0; x < img.getWidth(); x++) {
-                //todo: fill in this to do what is intended
                 int pixel = img.getRGB(x, y);
                 Color color = new Color(pixel);
 
@@ -203,11 +207,12 @@ public class ImageController {
                 int sepiaRed = (int)Math.round(testRed);
                 int sepiaBlue = (int)Math.round(testBlue);
                 int sepiaGreen = (int)Math.round(testGreen);
-                if(sepiaRed >= 250){
-                    sepiaRed = 250;
+                //If the color value is over 255, sets it to 255. I don't think it's possible for blue to be over 255, at least I hope it's not.
+                if(sepiaRed >= 255){
+                    sepiaRed = 255;
                 }
-                if(sepiaGreen >= 250){
-                    sepiaGreen = 250;
+                if(sepiaGreen >= 255){
+                    sepiaGreen = 255;
                 }
                 red = sepiaRed;
                 green = sepiaGreen;
