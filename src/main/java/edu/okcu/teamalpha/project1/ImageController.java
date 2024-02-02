@@ -15,11 +15,12 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 
 public class ImageController {
 
     public Label lblWelcomeText;
+
+    //ChoiceBox for getting the user's decision for which transformation to take place
     public ChoiceBox choiceTransformation;
     public VBox vboxBackground;
     public ImageView imgNewPicture;
@@ -44,17 +45,15 @@ public class ImageController {
      * transformed. If a file that is not an image is loaded, changes label asking user to reselect image
      * @param actionEvent - actionEvent
      */
-    public void onLoadImageClick(ActionEvent actionEvent) throws IOException {
+    public void onLoadImageClick(ActionEvent actionEvent) {
         try {
             //finds image selected and loads it into display
             FileChooser fileChooser = new FileChooser();
             selectedFile = fileChooser.showOpenDialog(null);
 
             Image image = new Image(selectedFile.toURI().toString());
-
-            imgPicture.setImage(image);
-            imgPicture.setFitHeight(300);
-            imgPicture.setFitWidth(300);
+            //display the selected image
+            displayImage(image, imgPicture);
 
             lblWelcomeText.setText("Now select a transformation!");
         } catch (NullPointerException exception) {
@@ -65,6 +64,13 @@ public class ImageController {
     }
 
 
+    /**
+     * Alright, this is a big one cuz it does way too much. First, gets the transformation selected from the ChoiceBox.
+     * Converts the selected image into a BufferedImage. Then has a switch to call the appropriate method depending on the
+     * transformation. Finally, calls the displayImage() method to display the newly transformed image.
+     * @param actionEvent - actionEvent
+     * @throws IOException - I guess it has to throw this because it is using ImageIO.read(). Let's hope it doesn't get this exception.
+     */
     public void onButtonApplyClicked(ActionEvent actionEvent) throws IOException {
         try {
             String transformationSelection = choiceTransformation.getValue().toString();
@@ -72,30 +78,28 @@ public class ImageController {
 
 
             switch (transformationSelection) {     //Switch to handle what choice is made from the ChoiceBox and call the respective methods.
-                case "Grayscale":
-                    changeGrayScale(img);
-                    break;
-                case "Sepia":
-                    changeSepia(img);
-                    break;
-                case "Reflect":
-                    changeReflect(img);
-                    break;
-                case "Mirror":
-                    changeMirror(img);
-                    break;
-                case "Upside Down":
-                    changeUpsideDown(img);
+                case "Grayscale" -> changeGrayScale(img);
+                case "Sepia" -> changeSepia(img);
+                case "Reflect" -> changeReflect(img);
+                case "Mirror" -> changeMirror(img);
+                case "Upside Down" -> changeUpsideDown(img);
             }
-            displayImage(convertToFxImage(img));  //Converts BufferedImage to Image using stolen method.
+            displayImage(convertToFxImage(img), imgNewPicture);  //Converts BufferedImage to Image using stolen method. Then displays it
         } catch (IllegalArgumentException exception) {
-            //if the user tries to apply a transformation without selecting an image, reprompts them.
+            //if the user tries to apply a transformation without selecting an image, prompts them.
             lblWelcomeText.setText("Please load an image first!");
+        } catch (NullPointerException exception) {
+            //if the user has an image BUT NOT a transformation selected, kill them. Just kidding tell them to select a transformation
+            lblWelcomeText.setText("Please select a transformation first!");
         }
 
     }
 
-    private BufferedImage changeUpsideDown(BufferedImage img) {
+    /**
+     * Method for upside down transformation. Selects a pixel from the top and the bottom, then flip their colors.
+     * @param img - selected image to be flipped upside down.
+     */
+    private void changeUpsideDown(BufferedImage img) {
             for (int x = 0; x < img.getWidth(); x++) {
                 int yEnd = img.getHeight()-1;
                 int yStart = 0;
@@ -110,11 +114,13 @@ public class ImageController {
                     img.setRGB(x, yStart, color2.getRGB());
                 }
             }
-            return img;
         }
 
-
-    private BufferedImage changeMirror(BufferedImage img) {
+    /**
+     *  Method for mirroring the right side of the image to the left. It creates a funny effect when using pictures of faces.
+     * @param img - the image to be mirrored
+     */
+    private void changeMirror(BufferedImage img) {
             for (int y = 0; y < img.getHeight(); y++) {
                 int xEnd = img.getWidth()-1;
                 int xStart = 0;
@@ -126,35 +132,43 @@ public class ImageController {
                     img.setRGB(xEnd, y, color.getRGB());
                 }
             }
-            return img;
         }
 
-    private BufferedImage changeGrayScale(BufferedImage img) {
+    /**
+     * Method that turns the image into grayscale
+     * @param img - BufferedImage to be turned grayscale
+     */
+    private void changeGrayScale(BufferedImage img) {
+        //loop through every pixel
         for (int y = 0; y < img.getHeight(); y++) {
             for (int x = 0; x < img.getWidth(); x++) {
-                //todo: fix this so it doesnt turn it red lmao
+
                 int pixel = img.getRGB(x, y);
                 Color color = new Color(pixel);
 
-                //int alpha = color.getAlpha(); //alpha is useless currently for grayscale
+                //get the color values for each color
                 int red = color.getRed();
                 int green = color.getGreen();
                 int blue = color.getBlue();
 
+                //do some slight maths nd stuff
                 int grayScale = (red + blue + green)/3;
                 red = grayScale;
                 green = grayScale;
                 blue = grayScale;
 
+                //reassign the NEW color values for the pixel.
                 Color newPixel = new Color(red, green, blue);
                 img.setRGB(x, y, newPixel.getRGB());
             }
         }
-        return img;
     }
 
-    //This method reflects an image but only once
-    private BufferedImage changeReflect(BufferedImage img) {
+    /**
+     * Method to reflect an image horizontally.
+     * @param img - The BufferedImage to be reflected
+     */
+    private void changeReflect(BufferedImage img) {
         for (int y = 0; y < img.getHeight(); y++) {
             int xEnd = img.getWidth()-1;
             int xStart = 0;
@@ -169,10 +183,9 @@ public class ImageController {
                 img.setRGB(xStart, y, color2.getRGB());
                 }
             }
-            return img;
         }
 
-    private BufferedImage changeSepia(BufferedImage img) {
+    private void changeSepia(BufferedImage img) {
         for (int y = 0; y < img.getHeight(); y++) {
             for (int x = 0; x < img.getWidth(); x++) {
                 //todo: fill in this to do what is intended
@@ -204,13 +217,17 @@ public class ImageController {
                 img.setRGB(x, y, newPixel.getRGB());
             }
         }
-        return img;
     }
 
-    public void displayImage(Image image) {
-        imgNewPicture.setImage(image);
-        imgNewPicture.setFitHeight(300);
-        imgNewPicture.setFitWidth(300);
+    /**
+     * Displays the edited image to the second ImageView
+     * @param image - Newly transformed image to be displayed
+     */
+    public void displayImage(Image image, ImageView imageView) {
+        //set the image and then the resoluuuuution as well!!!
+        imageView.setImage(image);
+        imageView.setFitHeight(300);
+        imageView.setFitWidth(300);
     }
 
     /**

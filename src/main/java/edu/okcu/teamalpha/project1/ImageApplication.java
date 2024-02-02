@@ -10,6 +10,7 @@ import java.io.IOException;
 public class ImageApplication extends Application {
     @Override
     public void start(Stage stage) throws IOException {
+        //a bunch of required stuff for it to load
         FXMLLoader fxmlLoader = new FXMLLoader(ImageApplication.class.getResource("hello-view.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 1000, 700);
         stage.setTitle("Image Editor");
