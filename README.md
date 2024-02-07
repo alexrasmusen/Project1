@@ -4,6 +4,14 @@ Project 1
 
 ### The Project
 This is a software that prompts the user to select an image, then applies a transformation or filter to the selected image.
+#### How to use the software
+1. Start the program
+2. Select "Load Image"
+3. Choose an image to use
+4. Select a transformation the drop down box
+5. Click "Apply"
+6. Voila!
+
 ![Project1 Image](https://i.imgur.com/sJZzj2L.png "Project1")
 
 
